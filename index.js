@@ -38,4 +38,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+const port = 3000
+app.get('/', (req, res) => {
+    res.sendFile('public/index.html');
+})
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+})
+
 module.exports = app;
