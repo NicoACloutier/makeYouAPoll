@@ -4,8 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require(path.join(__dirname, 'routes/index.js'));
+var usersRouter = require(path.join(__dirname, 'routes/users.js'));
 
 var app = express();
 
@@ -38,12 +38,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const port = 3000
+const port = 3000;
 app.get('/', (req, res) => {
     res.sendFile('public/index.html');
 })
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 })
+
+var main = require(path.join(__dirname, 'public/javascripts/main.js'));
+main(app);
 
 module.exports = app;
