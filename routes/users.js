@@ -1,6 +1,8 @@
+const express = require('express');
 const path = require('path');
 const pool = require(path.join(__dirname, 'pool.js'));
 const { createHash } = require('crypto');
+const router = express.Router();
 
 const saltLength = 20;
 const saltChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+`~;:[{]}/?.>,<';
@@ -25,17 +27,18 @@ function createSalt() {
 /*
 Return the current number of users stored in the `users` table.
 */
-const getNumUsers = (request, response) => {
-    pool.query('SELECT count(*) AS count FROM users', [], (error, results) => {
+router.get('/', (request, response) => {
+    pool.query('SELECT * FROM users', [], (error, results) => {
         if (error) throw error;
         response.status(200).json(results.rows);
     });
-}
+});
+
 
 /*
 Create a user and add to the `users` table.
 */
-const createUser = (request, response) => {
+router.post('/', (request, response) => {
     const { email, password } = parseInt(request.params.id);
     const id = getNumUsers();
     const salt = createSalt();
@@ -43,6 +46,6 @@ const createUser = (request, response) => {
     pool.query('INSERT INTO users (id, salt, hash, email) VALUES ($1, $2, $3, $4) RETURNING *', [id, salt, hash, email], (error, results) => {
         if (error) throw error;
     });
-}
+});
 
-module.exports = { getNumUsers, createUser };
+module.exports = router;
