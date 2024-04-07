@@ -16,7 +16,7 @@ function createSalt() {
     const numCharacters = saltChars.length;
     let counter = 0;
     while (counter < saltLength) {
-      salt += saltChars.charAt(Math.floor(Math.random() * charactersLength));
+      salt += saltChars.charAt(Math.floor(Math.random() * numCharacters));
       counter += 1;
     }
     return salt;
