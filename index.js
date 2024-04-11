@@ -7,6 +7,8 @@ const bodyParser = require('body-parser')
 
 const indexRouter = require(path.join(__dirname, 'routes/index.js'));
 const usersRouter = require(path.join(__dirname, 'routes/users.js'));
+const entriesRouter = require(path.join(__dirname, 'routes/entry.js'));
+const pollsRouter = require(path.join(__dirname, 'routes/polls.js'));
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/entries', entriesRouter);
+app.use('/polls', pollsRouter);
 
 app.use(bodyParser.json());
 app.use(
