@@ -3,11 +3,16 @@ import './App.css';
 import { createHashRouter, RouterProvider } from "react-router-dom";
 
 import Registration from './components/Registration.js';
+import Login from './components/Login.js';
 
 const router = createHashRouter([
   {
     path: "/register",
     element: <Registration />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
