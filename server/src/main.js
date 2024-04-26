@@ -34,10 +34,6 @@ app.use('/polls', pollsRouter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
 
-app.use((request, result, next) => {
-    next(createError(404));
-});
-
 app.use((err, request, result, next) => {
     result.locals.message = err.message;
     result.locals.error = request.app.get('env') === 'development' ? err : {};
@@ -47,7 +43,7 @@ app.use((err, request, result, next) => {
 
 const port = 3000;
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Example app listening at http://127.0.0.1:${port}`);
 });
 
 module.exports = app;
