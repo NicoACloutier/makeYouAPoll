@@ -31,11 +31,19 @@ async function login(request, response) {
     if (informationMatches(enteredPassword, userInfo["salt"], userInfo["hash"])) {
         const sessionId = uuid();
         sessions[sessionId] = userInfo["user_id"];
+        response.cookie('si', sessionId, { maxAge: 9000 });
         response.status(200).send('Success.');
     }
     else { response.status(401).send('Incorrect username or password.'); }
 }
 
+function logout(request, response) {
+    const id = request.cookies.si;
+    if (sessions[id] !== undefined) { delete sessions[id]; }
+    response.status(200).send('Logged out.');
+}
+
 router.post('/in', login);
+router.post('/out', logout);
 
 module.exports = router;
