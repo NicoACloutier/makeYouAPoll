@@ -6,10 +6,10 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const indexRouter = require(path.join(__dirname, 'routes/index.js'));
 const usersRouter = require(path.join(__dirname, 'routes/users.js'));
 const entriesRouter = require(path.join(__dirname, 'routes/entries.js'));
 const pollsRouter = require(path.join(__dirname, 'routes/polls.js'));
+const loginRouter = require(path.join(__dirname, 'routes/logins.js'));
 
 const app = express();
 
@@ -26,10 +26,10 @@ app.use(cors({
     credentials: true
 }));
 
-//app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/entries', entriesRouter);
 app.use('/polls', pollsRouter);
+app.use('/login', loginRouter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
