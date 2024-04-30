@@ -29,7 +29,7 @@ app.use(cors({
 app.use('/users', usersRouter);
 app.use('/entries', entriesRouter);
 app.use('/polls', pollsRouter);
-app.use('/login', loginRouter);
+app.use('/auth', loginRouter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
