@@ -30,8 +30,8 @@ async function login(request, response) {
     
     if (informationMatches(enteredPassword, userInfo["salt"], userInfo["hash"])) {
         const sessionId = uuid();
-        sessions[sessionId] = userInfo["user_id"];
-        response.cookie('si', sessionId, { maxAge: 9000 });
+        sessions[sessionId] = { id: userInfo["user_id"], name: userInfo["name"], email: userInfo["email"] };
+        response.cookie('si', sessionId, { httpOnly: true, maxAge: 3600000, });
         response.status(200).send('Success.');
     }
     else { response.status(401).send('Incorrect username or password.'); }
@@ -43,7 +43,14 @@ function logout(request, response) {
     response.status(200).send('Logged out.');
 }
 
+function auth(request, response) {
+    const id = request.cookies.si;
+    if (sessions[id] === undefined) { response.status(401).send('Invalid session.'); }
+    else { response.status(200).json(sessions[id]); }
+}
+
 router.post('/in', login);
 router.post('/out', logout);
+router.get('/', auth);
 
 module.exports = router;
