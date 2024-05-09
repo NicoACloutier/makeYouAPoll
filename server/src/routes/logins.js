@@ -31,8 +31,8 @@ async function login(request, response) {
     if (informationMatches(enteredPassword, userInfo["salt"], userInfo["hash"])) {
         const sessionId = uuid();
         sessions[sessionId] = { id: userInfo["user_id"], name: userInfo["name"], email: userInfo["email"] };
-        response.cookie('si', sessionId, { httpOnly: false, maxAge: 3600000, });
-        response.status(200).send('Success.');
+        response.cookie('si', sessionId, { httpOnly: false, maxAge: 3600000 });
+        response.status(200).json(sessions[sessionId]);
     }
     else { response.status(401).send('Incorrect username or password.'); }
 }
