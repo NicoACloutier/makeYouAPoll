@@ -7,10 +7,12 @@ function Home() {
     const [users, setUsers] = useState(false);
 
     async function getUser() {
-        const response = await fetch(`http://localhost:${SERVER_PORT}/auth`, {
+        const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, {
             method: 'GET',
+            headers: { 'Content-Type': 'application/json', },
+            credentials: 'include'
         });
-        if (response === undefined) { return { name: undefined }; }
+        if (response === undefined || response.status !== 200) { return { name: undefined }; }
         return response.json();
     }
 

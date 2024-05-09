@@ -50,7 +50,7 @@ function Registration() {
     const [users, setUsers] = useState(false);
 
     function getUser() {
-        fetch(`http://localhost:${SERVER_PORT}`).then(response => {
+        fetch(`http://127.0.0.1:${SERVER_PORT}`).then(response => {
             return response.text();
         }).then(data => {
             setUsers(data);
@@ -59,9 +59,8 @@ function Registration() {
     
     function createUser() {
         const information = makeUserInfo();
-        console.log(information);
         if (information === undefined) return;
-        fetch(`http://localhost:${SERVER_PORT}/users`, {
+        fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify(information),
