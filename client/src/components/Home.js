@@ -28,10 +28,28 @@ async function getUser() {
     }
 }
 
+function makePoll(pollInfo) {
+    return (
+        <li>
+            <p>{pollInfo.question}</p>
+            <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
+        </li>
+    );
+}
+
+function makePolls(polls) {
+    if (polls !== undefined) {
+        return (
+            <ul>{polls.map(makePoll)}</ul>
+        );
+    }
+    else { return <ul></ul>; }
+}
+
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { id: undefined, name: undefined, email: undefined, answers: undefined, polls: undefined };
+        this.state = {};
     }
 
     async componentDidMount() {
@@ -43,6 +61,7 @@ class Home extends React.Component {
         return (
             <div className="App">
                 <h1>{this.state.name}</h1>
+                <div>{makePolls(this.state.polls)}</div>
             </div>
         );
     }
