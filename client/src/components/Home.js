@@ -4,7 +4,8 @@ const SERVER_PORT = 3000;
 
 async function getPosts(id) {
     const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
-    if (authResponse.status === 200) {
+    const authData = await authResponse.json();
+    if (authResponse.status === 200 && authData.id === id) {
         let polls = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls?user_id=${id}`, { method: 'GET', });
         polls = (await polls.json()).slice(0, 5);
         for (let i = 0; i < polls.length; i++) {
