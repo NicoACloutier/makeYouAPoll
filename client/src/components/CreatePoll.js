@@ -32,9 +32,10 @@ function updateValue() {
 function CreatePoll() {
     async function createAnswers(pollId) {
         for (let i = 0; i < answers.length; i++) {
+            const answer = answers[i];
             fetch(`http://127.0.0.1:${SERVER_PORT}/answers`, {
                 method: 'POST',
-                body: JSON.stringify({ pollId, i, answers[i] }),
+                body: JSON.stringify({ pollId, i, answer }),
             });
         }
     }
@@ -46,9 +47,10 @@ function CreatePoll() {
             const question = document.getElementById("question").value;
             const end = document.getElementById("time").value;
             const nAnswers = document.getElementById("slider").value;
+            const id = authData.id;
             const response = fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, {
                 method: 'POST',
-                body: JSON.stringify({ nAnswers, authData.id, question, end }),
+                body: JSON.stringify({ nAnswers, id, question, end }),
             });
             createAnswers(response.id);
         }
@@ -59,7 +61,7 @@ function CreatePoll() {
             <label id="notification"></label><br></br>
             <div>Question: </div><input type="text" id="question" name="question" placeholder="Poll question"></input><br></br>
             <div>End time: </div><input type="text" id="time" name="time" placeholder="YYYY-MM-DD"></input><br></br>
-            <div>Answers: <input type="range" min="2" max="20" value="2" id="slider" onchange="updateValue()"><div id="sliderVal">{nFields}</div><br></br>
+            <div>Answers: </div><input type="range" min="2" max="20" value="2" id="slider" onchange="updateValue()"></input><div id="sliderVal">{nFields}</div><br></br>
             <div id="answerList">{renderAnswers()}</div>
             <button type="submit" onClick={createPoll}>Submit</button>
         </div>
