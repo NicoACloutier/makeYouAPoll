@@ -8,15 +8,16 @@ let nFields = 2;
 function changeAnswer(newAnswer, i) { answers[i] = newAnswer; }
 
 function renderAnswer(answer, i) {
-    return <input type="text" onchange="changeAnswer(this.value, i)">{answer}</input>;
+    return <input type="text" value={answer}></input>;
 }
 
 function renderAnswers() {
     return <div>{answers.map(renderAnswer)}</div>;
 }
 
-function updateValue() {
+function updateValue(event, value) {
     const slider = document.getElementById("slider");
+    slider.value = value;
     const previous = nFields;
     document.getElementById("sliderVal").innerHTML = slider.value;
     nFields = slider.value;
@@ -61,7 +62,7 @@ function CreatePoll() {
             <label id="notification"></label><br></br>
             <div>Question: </div><input type="text" id="question" name="question" placeholder="Poll question"></input><br></br>
             <div>End time: </div><input type="text" id="time" name="time" placeholder="YYYY-MM-DD"></input><br></br>
-            <div>Answers: </div><input type="range" min="2" max="20" value="2" id="slider" onchange="updateValue()"></input><div id="sliderVal">{nFields}</div><br></br>
+            <div>Answers: </div><input type="range" min="2" max="20" value="2" name="slider" id="slider" onChangeCommitted={updateValue}></input><div id="sliderVal">{nFields}</div><br></br>
             <div id="answerList">{renderAnswers()}</div>
             <button type="submit" onClick={createPoll}>Submit</button>
         </div>
