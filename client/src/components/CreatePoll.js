@@ -38,9 +38,8 @@ class CreatePoll extends React.Component {
         const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
         const authData = await authResponse.json();
         if (authResponse.status === 200) {
-            const question = document.getElementById("question").value;
-            const end = document.getElementById("time").value;
-            const nAnswers = document.getElementById("slider").value;
+            const { answers, question, end } = this.state;
+            const nAnswers = answers.length;
             const id = authData.id;
             const response = fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, {
                 method: 'POST',
