@@ -9,6 +9,7 @@ class CreatePoll extends React.Component {
         this.state = { answers: ["", ""], question: "", end: "" };
         
         this.updateValue = this.updateValue.bind(this);
+        this.changeAnswer = this.changeAnswer.bind(this);
         this.updateQuestion = this.updateQuestion.bind(this);
         this.updateEnd = this.updateEnd.bind(this);
         this.renderAnswers = this.renderAnswers.bind(this);
@@ -17,11 +18,15 @@ class CreatePoll extends React.Component {
     changeAnswer(event, i) { this.state.answers[i] += event.target.value; }
     
     renderAnswer(answer, i) {
-        return <input type="text" id={`ans${i}`} key={`ans${i}`} defaultValue={answer} onChange={x => changeAnswer(x, i)}></input>;
+        return <input type="text" id={`ans${i}`} key={`ans${i}`} defaultValue={answer} onChange={x => this.changeAnswer(x, i)}></input>;
     }
     
     renderAnswers() {
-        return <div>{this.state.answers.map(renderAnswer)}</div>;
+        let renderedAnswers = [];
+        for (let i = 0; i < this.state.answers.length; i++) {
+            renderedAnswers.push(this.renderAnswer(this.state.answers[i], i));
+        }
+        return <div>{renderedAnswers}</div>;
     }
     
     async createAnswers(pollId) {
@@ -45,7 +50,7 @@ class CreatePoll extends React.Component {
                 method: 'POST',
                 body: JSON.stringify({ nAnswers, id, question, end }),
             });
-            createAnswers(response.id);
+            this.createAnswers(response.id);
         }
     }
     
@@ -59,23 +64,26 @@ class CreatePoll extends React.Component {
 
     async updateValue(event) {
         const value = parseInt(event.target.value);
+        const answers = this.state.answers;
         if (this.state.answers.length < value) {
-            while (this.state.answers.length !== value) { this.state.answers.push(""); }
+            while (this.state.answers.length !== value) { answers.push(""); }
         }
         else if (this.state.answers.length > value) {
-            while (this.state.answers.length !== value) { this.state.answers.pop(); }
+            while (this.state.answers.length !== value) { answers.pop(); }
         }
+        this.setState({ answers: answers });
     }
     
     render () {
+        return (
         <div className="App">
             <label id="notification"></label>
-            <div>Question: </div><input type="text" id="question" name="question" placeholder="Poll question" onChange={updateQuestion}></input>
-            <div>End time: </div><input type="text" id="time" name="time" placeholder="YYYY-MM-DD" onChange={updateEnd}></input>
-            <div>Answers: </div><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={updateValue}></input><div id="sliderVal">{this.state.answers.length}</div>
+            <div>Question: </div><input type="text" id="question" name="question" placeholder="Poll question" onChange={this.updateQuestion}></input>
+            <div>End time: </div><input type="text" id="time" name="time" placeholder="YYYY-MM-DD" onChange={this.updateEnd}></input>
+            <div>Answers: </div><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={this.updateValue}></input><div id="sliderVal">{this.state.answers.length}</div>
             <div id="answerList">{this.renderAnswers()}</div>
-            <button type="submit" onClick={createPoll}>Submit</button>
-        </div>
+            <button type="submit" onClick={this.createPoll}>Submit</button>
+        </div>);
     };
 }
 
