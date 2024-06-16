@@ -38,7 +38,7 @@ router.post('/', (request, response) => {
     const pollId = uuid();
     pool.query('INSERT INTO polls (poll_id, n_options, user_id, question, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING *', [pollId, nAnswers, id, question, endTime], (error, results) => {
         if (error) throw error;
-        response.status(200).json(request.body);
+        response.status(200).json({ id: pollId });
     });
 });
 
