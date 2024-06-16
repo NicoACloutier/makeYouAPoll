@@ -11,7 +11,7 @@ async function getPosts(id) {
         for (let i = 0; i < polls.length; i++) {
             const pollId = polls[i].poll_id;
             const answer = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${id}`, { method: 'GET', });
-            polls[i].answers = await answer.json();
+            polls[i].answers = (await answer.json()).map(x => x.answer_text);
         }
         return polls;
     }

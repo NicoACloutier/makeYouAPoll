@@ -6,13 +6,15 @@ const SERVER_PORT = 3000;
 class CreatePoll extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { answers: ["", ""], question: "", end: "" };
+        this.state = { answers: ["", ""], question: "", endTime: "" };
         
         this.updateValue = this.updateValue.bind(this);
         this.changeAnswer = this.changeAnswer.bind(this);
         this.updateQuestion = this.updateQuestion.bind(this);
         this.updateEnd = this.updateEnd.bind(this);
         this.renderAnswers = this.renderAnswers.bind(this);
+        this.renderAnswer = this.renderAnswer.bind(this);
+        this.createPoll = this.createPoll.bind(this);
     }
 
     changeAnswer(event, i) { this.state.answers[i] += event.target.value; }
@@ -34,6 +36,7 @@ class CreatePoll extends React.Component {
             const answer = this.state.answers[i];
             fetch(`http://127.0.0.1:${SERVER_PORT}/answers`, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({ pollId, i, answer }),
             });
         }
@@ -43,14 +46,16 @@ class CreatePoll extends React.Component {
         const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
         const authData = await authResponse.json();
         if (authResponse.status === 200) {
-            const { answers, question, end } = this.state;
+            const { answers, question, endTime } = this.state;
             const nAnswers = answers.length;
             const id = authData.id;
-            const response = fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, {
+            const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, {
                 method: 'POST',
-                body: JSON.stringify({ nAnswers, id, question, end }),
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON.stringify({ nAnswers, id, question, endTime }),
             });
-            this.createAnswers(response.id);
+            const data = await response.json();
+            this.createAnswers(data.id);
         }
     }
     
@@ -59,7 +64,7 @@ class CreatePoll extends React.Component {
     }
     
     updateEnd(event) {
-        this.setState({ end: event.target.value });
+        this.setState({ endTime: event.target.value });
     }
 
     async updateValue(event) {

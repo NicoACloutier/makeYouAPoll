@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const uuid = require('uuid').v4;
 const pool = require(path.join(__dirname, 'pool.js'));
 const router = express.Router();
 
@@ -33,8 +34,9 @@ router.get('/', (request, response) => {
 Create a poll and add to the `polls` table.
 */
 router.post('/', (request, response) => {
-    const { n_options, user_id, question, end_time } = request.body;
-    pool.query('INSERT INTO polls (n_options, user_id, question, end_time) VALUES ($1, $2, $3, $4) RETURNING *', [n_options, user_id, question, end_time], (error, results) => {
+    const { nAnswers, id, question, endTime } = request.body;
+    const pollId = uuid();
+    pool.query('INSERT INTO polls (poll_id, n_options, user_id, question, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING *', [pollId, nAnswers, id, question, endTime], (error, results) => {
         if (error) throw error;
         response.status(200).json(request.body);
     });
