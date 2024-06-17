@@ -29,7 +29,7 @@ function Registration() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
-    const [message, setMessage] = useState(false);
+    const [message, setMessage] = useState('');
     
     function makeUserInfo(email, name, password, repeatedPassword) {
         if (!email || !name || !password || !repeatedPassword) {
