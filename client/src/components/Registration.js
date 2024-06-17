@@ -24,61 +24,61 @@ function createSalt() {
     return salt;
 }
 
-function makeUserInfo() {
-    const email = document.getElementById("email").value;
-    const name = document.getElementById("name").value;
-    const password = document.getElementById("password").value;
-    const repeatedPassword = document.getElementById("repeatedPassword").value;
-    
-    if (!email || !name || !password || !repeatedPassword) {
-        document.getElementById("notification").innerHTML = "Please fill all fields in.";
-        return;
-    }
-    if (password !== repeatedPassword) {
-        document.getElementById("notification").innerHTML = "Passwords do not match.";
-        return;
-    }
-    
-    const salt = createSalt();
-    const hash = createHash('sha256').update(password + salt).digest('hex');
-    
-    document.getElementById("notification").innerHTML = "";
-    return { email, name, hash, salt };
-}
-
 function Registration() {
-    const [users, setUsers] = useState(false);
-
-    function getUser() {
-        fetch(`http://127.0.0.1:${SERVER_PORT}`).then(response => {
-            return response.text();
-        }).then(data => {
-            setUsers(data);
-        });
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatedPassword, setRepeatedPassword] = useState('');
+    const [message, setMessage] = useState(false);
+    
+    function makeUserInfo(email, name, password, repeatedPassword) {
+        if (!email || !name || !password || !repeatedPassword) {
+            setMessage("Please fill all fields in.");
+            return;
+        }
+        if (password !== repeatedPassword) {
+            setMessage("Passwords do not match.");
+            return;
+        }
+        const salt = createSalt();
+        const hash = createHash('sha256').update(password + salt).digest('hex');
+        setMessage("");
+        return { email, name, hash, salt };
     }
     
+    function handleEmailChange(e) {
+        setEmail(e.target.value);
+    }
+    
+    function handleNameChange(e) {
+        setName(e.target.value);
+    }
+    
+    function handlePasswordChange(e) {
+        setPassword(e.target.value);
+    }
+    
+    function handleRepeatedPasswordChange(e) {
+        setRepeatedPassword(e.target.value);
+    }
+
     function createUser() {
-        const information = makeUserInfo();
+        const information = makeUserInfo(email, name, password, repeatedPassword);
         if (information === undefined) return;
         fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify(information),
-        }).then(response => {
-            return response.text();
-        }).then(data => {
-            alert(data);
-            getUser();
         });
     }
     
     return (
         <div className="App">
-            <label id="notification"></label><br></br>
-            <input type="text" id="email" name="email" placeholder="email@example.com"></input><br></br>
-            <input type="text" id="name" name="name" placeholder="Username"></input><br></br>
-            <input type="password" id="password" name="password" placeholder="Password"></input><br></br>
-            <input type="password" id="repeatedPassword" name="repeatedPassword" placeholder="Repeat password"></input><br></br>
+            <label id="notification" value={message}></label><br></br>
+            <input type="text" id="email" name="email" placeholder="email@example.com" value={email} onChange={handleEmailChange}></input><br></br>
+            <input type="text" id="name" name="name" placeholder="Username" value={name} onChange={handleNameChange}></input><br></br>
+            <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange}></input><br></br>
+            <input type="password" id="repeatedPassword" name="repeatedPassword" placeholder="Repeat password" value={repeatedPassword} onChange={handleRepeatedPasswordChange}></input><br></br>
             <button type="submit" onClick={createUser}>Submit</button>
         </div>
     );
