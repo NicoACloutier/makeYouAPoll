@@ -59,7 +59,6 @@ function Home() {
             setPolls(data.polls);
         }
         fetchData();
-        console.log(polls);
     }, []);
     
     
