@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 
 const SERVER_PORT = 3000;
 
@@ -47,25 +48,27 @@ function makePolls(polls) {
     else { return <ul></ul>; }
 }
 
-class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    async componentDidMount() {
-        const ret = await getUser();
-        this.setState(ret);
-    }
+function Home() {
+    const [name, setName] = useState('');
+    const [polls, setPolls] = useState([]);
     
-    render() {
-        return (
-            <div className="App">
-                <h1>{this.state.name}</h1>
-                <div>{makePolls(this.state.polls)}</div>
-            </div>
-        );
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getUser();
+            setName(data.name);
+            setPolls(data.polls);
+        }
+        fetchData();
+        console.log(polls);
+    }, []);
+    
+    
+    return (
+        <div className="App">
+            <h1 value={name}></h1>
+            <div value={makePolls(polls)}></div>
+        </div>
+    );
 }
 
 export default Home;
