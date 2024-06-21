@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import queryString from 'query-string';
 
 const SERVER_PORT = 3000;
@@ -25,9 +26,9 @@ async function getUser(name) {
     }
 }
 
-function makePoll(pollInfo) {
+function makePoll(pollInfo, i) {
     return (
-        <li>
+        <li key={i}>
             <p>{pollInfo.question}</p>
             <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
         </li>
@@ -43,26 +44,27 @@ function makePolls(polls) {
     else { return <ul></ul>; }
 }
 
-class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    async componentDidMount() {
-        const userName = window.location.hash.match(/[?&]u=([^&]+)[&]?/)[1];
-        const ret = await getUser(userName);
-        this.setState(ret);
-    }
+function User() {
+    const [name, setName] = useState('');
+    const [polls, setPolls] = useState([]);
     
-    render() {
-        return (
-            <div className="App">
-                <h1>{this.state.name}</h1>
-                <div>{makePolls(this.state.polls)}</div>
-            </div>
-        );
-    }
+    useEffect(() => {
+        const userName = window.location.hash.match(/[?&]u=([^&]+)[&]?/)[1];
+        const fetchData = async () => {
+            const data = await getUser(userName);
+            setName(data.name);
+            setPolls(data.polls);
+        }
+        fetchData();
+    }, []);
+    
+    
+    return (
+        <div className="App">
+            <h1>{name}</h1>
+            <div>{makePolls(polls)}</div>
+        </div>
+    );
 }
 
-export default Home;
+export default User;
