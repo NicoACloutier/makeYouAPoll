@@ -30,9 +30,9 @@ async function getUser() {
     }
 }
 
-function makePoll(pollInfo) {
+function makePoll(pollInfo, i) {
     return (
-        <li>
+        <li key={i}>
             <p>{pollInfo.question}</p>
             <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
         </li>
@@ -64,8 +64,8 @@ function Home() {
     
     return (
         <div className="App">
-            <h1 value={name}></h1>
-            <div value={makePolls(polls)}></div>
+            <h1>{name}</h1>
+            <div>{makePolls(polls)}</div>
         </div>
     );
 }
