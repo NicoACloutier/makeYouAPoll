@@ -6,12 +6,13 @@ import '../App.css';
 const SERVER_PORT = 3000;
 
 function Login() {
-    const [users, setUsers] = useState(false);
+    const [email, setEmail] = useState("");
+    const [enteredPassword, setEnteredPassword] = useState("");
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     async function login() {
-        const email = document.getElementById("email").value;
-        const enteredPassword = document.getElementById("password").value;
+        setMessage("");
         const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth/in`, {
             method: 'POST',
             credentials: 'include',
@@ -22,13 +23,22 @@ function Login() {
         if (response.status === 200) {
             navigate('/', { replace: true });
         }
+        else if (response.status === 401) { setMessage("Incorrect username or password."); }
+    }
+    
+    function handleEmailChange(e) {
+        setEmail(e.target.value);
+    }
+    
+    function handleEnteredPasswordChange(e) {
+        setEnteredPassword(e.target.value);
     }
     
     return (
         <div className="App">
-            <label id="notification"></label><br></br>
-            <input type="text" id="email" name="email" placeholder="email@example.com"></input><br></br>
-            <input type="password" id="password" name="password" placeholder="Password"></input><br></br>
+            <label id="notification">{message}</label><br></br>
+            <input type="text" id="email" name="email" placeholder="email@example.com" onChange={handleEmailChange}></input><br></br>
+            <input type="password" id="password" name="password" placeholder="Password" onChange={handleEnteredPasswordChange}></input><br></br>
             <button type="submit" onClick={login}>Submit</button>
         </div>
     );
