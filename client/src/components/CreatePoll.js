@@ -1,39 +1,53 @@
 import React from 'react';
+import { useState } from 'react';
 import '../App.css';
 
 const SERVER_PORT = 3000;
 
-class CreatePoll extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { answers: ["", ""], question: "", endTime: "" };
-        
-        this.updateValue = this.updateValue.bind(this);
-        this.changeAnswer = this.changeAnswer.bind(this);
-        this.updateQuestion = this.updateQuestion.bind(this);
-        this.updateEnd = this.updateEnd.bind(this);
-        this.renderAnswers = this.renderAnswers.bind(this);
-        this.renderAnswer = this.renderAnswer.bind(this);
-        this.createPoll = this.createPoll.bind(this);
+function PollCreate() {
+    const [answers, setAnswers] = useState(["", ""]);
+    const [question, setQuestion] = useState("");
+    const [endTime, setEndTime] = useState("");
+    const [nAnswers, setNAnswers] = useState(2);
+    
+    function setAnswer(e, i) {
+        answers[i] = e.target.value;
+    }
+    
+    function updateQuestion(e) {
+        setQuestion(e.target.value);
+    }
+    
+    function updateEndTime(e) {
+        setEndTime(e.target.value);
     }
 
-    changeAnswer(event, i) { this.state.answers[i] += event.target.value; }
-    
-    renderAnswer(answer, i) {
-        return <input type="text" id={`ans${i}`} key={`ans${i}`} defaultValue={answer} onChange={x => this.changeAnswer(x, i)}></input>;
+    async function updateValue(e) {
+        const value = parseInt(e.target.value);
+        setNAnswers(value);
+        if (answers.length < value) {
+            while (answers.length !== value) { answers.push(""); }
+        }
+        else if (answers.length > value) {
+            while (answers.length !== value) { answers.pop(); }
+        }
     }
     
-    renderAnswers() {
+    function renderAnswer(i) {
+        return <input type="text" id={`ans${i}`} key={`ans${i}`} defaultValue={answers[i]} onChange={e => setAnswer(e, i)}></input>;
+    }
+    
+    function renderAnswers() {
         let renderedAnswers = [];
-        for (let i = 0; i < this.state.answers.length; i++) {
-            renderedAnswers.push(this.renderAnswer(this.state.answers[i], i));
+        for (let i = 0; i < answers.length; i++) {
+            renderedAnswers.push(renderAnswer(i));
         }
         return <div>{renderedAnswers}</div>;
     }
     
-    async createAnswers(pollId) {
-        for (let i = 0; i < this.state.answers.length; i++) {
-            const answer = this.state.answers[i];
+    async function createAnswers(pollId) {
+        for (let i = 0; i < answers.length; i++) {
+            const answer = answers[i];
             fetch(`http://127.0.0.1:${SERVER_PORT}/answers`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
@@ -42,12 +56,10 @@ class CreatePoll extends React.Component {
         }
     }
     
-    async createPoll() {
+    async function createPoll() {
         const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
         const authData = await authResponse.json();
         if (authResponse.status === 200) {
-            const { answers, question, endTime } = this.state;
-            const nAnswers = answers.length;
             const id = authData.id;
             const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, {
                 method: 'POST',
@@ -55,41 +67,19 @@ class CreatePoll extends React.Component {
                 body: JSON.stringify({ nAnswers, id, question, endTime }),
             });
             const data = await response.json();
-            this.createAnswers(data.id);
+            createAnswers(data.id);
         }
     }
     
-    updateQuestion(event) {
-        this.setState({ question: event.target.value });
-    }
-    
-    updateEnd(event) {
-        this.setState({ endTime: event.target.value });
-    }
-
-    async updateValue(event) {
-        const value = parseInt(event.target.value);
-        const answers = this.state.answers;
-        if (this.state.answers.length < value) {
-            while (this.state.answers.length !== value) { answers.push(""); }
-        }
-        else if (this.state.answers.length > value) {
-            while (this.state.answers.length !== value) { answers.pop(); }
-        }
-        this.setState({ answers: answers });
-    }
-    
-    render () {
-        return (
+    return (
         <div className="App">
-            <label id="notification"></label>
-            <div>Question: </div><input type="text" id="question" name="question" placeholder="Poll question" onChange={this.updateQuestion}></input>
-            <div>End time: </div><input type="text" id="time" name="time" placeholder="YYYY-MM-DD" onChange={this.updateEnd}></input>
-            <div>Answers: </div><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={this.updateValue}></input><div id="sliderVal">{this.state.answers.length}</div>
-            <div id="answerList">{this.renderAnswers()}</div>
-            <button type="submit" onClick={this.createPoll}>Submit</button>
-        </div>);
-    };
+            <div>Question: </div><input type="text" name="question" placeholder="Poll question" onChange={updateQuestion}></input>
+            <div>End time: </div><input type="text" name="time" placeholder="YYYY-MM-DD" onChange={updateEndTime}></input>
+            <div>Answers: </div><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={updateValue}></input><div>{nAnswers}</div>
+            <div>{renderAnswers()}</div>
+            <button type="submit" onClick={createPoll}>Submit</button>
+        </div>
+        );
 }
 
-export default CreatePoll;
+export default PollCreate;
