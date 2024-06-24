@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const SERVER_PORT = 3000;
@@ -9,6 +10,7 @@ function PollCreate() {
     const [question, setQuestion] = useState("");
     const [endTime, setEndTime] = useState("");
     const [nAnswers, setNAnswers] = useState(2);
+    const navigate = useNavigate();
     
     function setAnswer(e, i) {
         answers[i] = e.target.value;
@@ -68,6 +70,7 @@ function PollCreate() {
             });
             const data = await response.json();
             createAnswers(data.id);
+            navigate('/', { replace: true });
         }
     }
     
@@ -79,7 +82,7 @@ function PollCreate() {
             <div>{renderAnswers()}</div>
             <button type="submit" onClick={createPoll}>Submit</button>
         </div>
-        );
+    );
 }
 
 export default PollCreate;
