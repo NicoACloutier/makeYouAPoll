@@ -7,6 +7,7 @@ import Login from './components/Login.js';
 import Home from './components/Home.js';
 import User from './components/User.js';
 import CreatePoll from './components/CreatePoll.js';
+import Poll from './components/Poll.js';
 
 const router = createHashRouter([
     {
@@ -28,6 +29,10 @@ const router = createHashRouter([
     {
         path: "/create",
         element: <CreatePoll />,
+    },
+    {
+        path: "/poll",
+        element: <Poll />,
     },
 ]);
 
