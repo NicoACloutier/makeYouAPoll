@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const usersRouter = require(path.join(__dirname, 'routes/users.js'));
-const entriesRouter = require(path.join(__dirname, 'routes/entries.js'));
 const pollsRouter = require(path.join(__dirname, 'routes/polls.js'));
 const loginRouter = require(path.join(__dirname, 'routes/logins.js'));
 const answersRouter = require(path.join(__dirname, 'routes/answers.js'));
@@ -41,7 +40,6 @@ app.use(cors({
 }));
 
 app.use('/users', usersRouter);
-app.use('/entries', entriesRouter);
 app.use('/polls', pollsRouter);
 app.use('/auth', loginRouter);
 app.use('/answers', answersRouter);
