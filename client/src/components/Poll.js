@@ -12,10 +12,20 @@ async function getPoll(pollId) {
     return data;
 }
 
+
 function Poll() {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
     const [user, setUser] = useState({});
+    const [choice, setChoice] = useState(undefined);
+
+    function submit() {
+        if (choice !== undefined) {}
+    }
+
+    function makeAnser(answer, i) {
+        return <li key={answer}><input type="radio" onClick={x => setChoice(i)}></input><span>{answer}</span></li>; 
+    }
     
     useEffect(() => {
         const fetchUser = async () => {
@@ -48,7 +58,8 @@ function Poll() {
         return (
             <div className="App">
                 <p>{question}</p>
-                <ul>{answers.map(x => <li key={x}><input type="radio"></input><span>{x}</span></li>)}</ul>
+                <ul>{answers.map(makeAnswer)}</ul>
+                <button type="submit" onClick={submit}>Submit</button>    
             </div>
         );
     }
