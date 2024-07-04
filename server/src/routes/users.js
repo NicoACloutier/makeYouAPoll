@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
+const uuid = require('uuid').v4;
+const { createHash } = require('crypto');
 const pool = require(path.join(__dirname, 'pool.js'));
 const router = express.Router();
+
+const SALT_LENGTH = 20;
 
 /*
 Return a user stored in the `users` table given their email.
@@ -29,9 +33,12 @@ router.get('/:id', (request, response) => {
 Create a user and add to the `users` table.
 */
 router.post('/', (request, response) => {
-    const { salt, hash, email, name } = request.body;
+    const { name, email, enteredPassword } = request.body;
+    const salt = uuid().substring(0, SALT_LENGTH);
+    const hash = createHash('sha256').update(enteredPassword + salt).digest('hex');
     pool.query('INSERT INTO users (salt, hash, email, name) VALUES ($1, $2, $3, $4) RETURNING *;', [salt, hash, email, name], (error, results) => {
         if (error) throw error;
+        response.status(200).json(results.rows)
     });
 });
 

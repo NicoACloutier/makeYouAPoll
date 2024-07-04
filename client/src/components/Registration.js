@@ -1,28 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import '../App.css';
-import { createHash } from 'crypto';
 
-const SALT_LENGTH = 20;
-const SALT_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+`~;:[{]}/?.>,<';
 const SERVER_PORT = 3000;
-
-/*
-Create the salt for authentication.
-Arguments:
-Returns:
-    `salt`: A string of length `SALT_LENGTH` of randomly selected characters from `SALT_CHARS`.
-*/
-function createSalt() {
-    let salt = '';
-    const numCharacters = SALT_CHARS.length;
-    let counter = 0;
-    while (counter < SALT_LENGTH) {
-      salt += SALT_CHARS.charAt(Math.floor(Math.random() * numCharacters));
-      counter += 1;
-    }
-    return salt;
-}
 
 function Registration() {
     const [email, setEmail] = useState('');
@@ -30,21 +10,6 @@ function Registration() {
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
     const [message, setMessage] = useState('');
-    
-    function makeUserInfo(email, name, password, repeatedPassword) {
-        if (!email || !name || !password || !repeatedPassword) {
-            setMessage("Please fill all fields in.");
-            return;
-        }
-        if (password !== repeatedPassword) {
-            setMessage("Passwords do not match.");
-            return;
-        }
-        const salt = createSalt();
-        const hash = createHash('sha256').update(password + salt).digest('hex');
-        setMessage("");
-        return { email, name, hash, salt };
-    }
     
     function handleEmailChange(e) {
         setEmail(e.target.value);
@@ -63,12 +28,18 @@ function Registration() {
     }
 
     function createUser() {
-        const information = makeUserInfo(email, name, password, repeatedPassword);
-        if (information === undefined) return;
+        if (!email || !name || !password || !repeatedPassword) {
+            setMessage("Please fill all fields in.");
+            return;
+        }
+        if (password !== repeatedPassword) {
+            setMessage("Passwords do not match.");
+            return;
+        }
         fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
-            body: JSON.stringify(information),
+            body: JSON.stringify({ name, email, password }),
         });
     }
     
