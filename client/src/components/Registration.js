@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const SERVER_PORT = 3000;
@@ -10,6 +11,7 @@ function Registration() {
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
     
     function handleEmailChange(e) {
         setEmail(e.target.value);
@@ -27,7 +29,7 @@ function Registration() {
         setRepeatedPassword(e.target.value);
     }
 
-    function createUser() {
+    async function createUser() {
         if (!email || !name || !password || !repeatedPassword) {
             setMessage("Please fill all fields in.");
             return;
@@ -36,11 +38,27 @@ function Registration() {
             setMessage("Passwords do not match.");
             return;
         }
-        fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
+        const registerResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify({ name, email, password }),
         });
+        if (registerResponse.status !== 200) {
+            setMessage("An error occurred on the server. Try again later.");
+            return;
+        }
+        const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth/in`, {
+            method: 'POST',
+            credentials: 'include',
+            withCredentials: true,
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({ email, password }),
+        });
+        if (response.status === 200) {
+            navigate('/', { replace: true });
+            return;
+        }
+        navigate('/login', { replace: true });
     }
     
     return (
