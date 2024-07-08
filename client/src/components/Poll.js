@@ -17,10 +17,17 @@ function Poll() {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
     const [user, setUser] = useState({});
+    const [pollId, setPollId] = useState(undefined);
     const [choice, setChoice] = useState(undefined);
 
     function submit() {
-        if (choice !== undefined) {}
+        if (choice !== undefined && user !== undefined) {
+            fetch(`http://127.0.0.1:${SERVER_PORT}/entries`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: { poll_id: poll_id, answer_id: choice, user_id: user.id },
+            })
+        }
     }
 
     function makeAnser(answer, i) {
@@ -37,7 +44,7 @@ function Poll() {
         }
         fetchUser();
         
-        const pollId = window.location.hash.match(/[?&]p=([^&]+)[&]?/)[1];
+        setPollId(window.location.hash.match(/[?&]p=([^&]+)[&]?/)[1]);
         const fetchData = async () => {
             const data = await getPoll(pollId);
             setQuestion(data.question);
