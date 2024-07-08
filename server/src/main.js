@@ -10,6 +10,7 @@ const usersRouter = require(path.join(__dirname, 'routes/users.js'));
 const pollsRouter = require(path.join(__dirname, 'routes/polls.js'));
 const loginRouter = require(path.join(__dirname, 'routes/logins.js'));
 const answersRouter = require(path.join(__dirname, 'routes/answers.js'));
+const entriesRouter = require(path.join(__dirname, 'routes/entries.js'))
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-    origin: 'http://127.0.0.1:8081',
+    origin: 'http://127.0.0.1:8080',
     credentials: true
 }));
 
@@ -43,6 +44,7 @@ app.use('/users', usersRouter);
 app.use('/polls', pollsRouter);
 app.use('/auth', loginRouter);
 app.use('/answers', answersRouter);
+app.use('/entries', entriesRouter);
 
 const port = 3000;
 app.listen(port, () => {
