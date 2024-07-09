@@ -53,7 +53,7 @@ function PollCreate() {
             fetch(`http://127.0.0.1:${SERVER_PORT}/answers`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify({ pollId, i, answer }),
+                body: JSON.stringify({ poll_id: pollId, answer_id: i, answer_text: answer }),
             });
         }
     }
