@@ -33,5 +33,6 @@ router.post('/', (request, response) => {
         if (error) throw error;
         response.status(200).json(request.body);
     });
+});
 
 module.exports = router;
