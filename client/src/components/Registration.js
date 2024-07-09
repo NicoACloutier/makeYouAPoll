@@ -41,7 +41,7 @@ function Registration() {
         const registerResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', },
-            body: JSON.stringify({ name, email, password }),
+            body: JSON.stringify({ name: name, email: email, enteredPassword: password }),
         });
         if (registerResponse.status !== 200) {
             setMessage("An error occurred on the server. Try again later.");
@@ -52,7 +52,7 @@ function Registration() {
             credentials: 'include',
             withCredentials: true,
             headers: { 'Content-Type': 'application/json', },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email: email, enteredPassword: password }),
         });
         if (response.status === 200) {
             navigate('/', { replace: true });
