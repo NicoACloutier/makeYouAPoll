@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SERVER_PORT = 3000;
 
@@ -33,7 +34,7 @@ async function getUser() {
 function makePoll(pollInfo, i) {
     return (
         <li key={i}>
-            <p>{pollInfo.question}</p>
+            <p><a href={`../poll?p=${pollInfo.id}`}>{pollInfo.question}</a></p>
             <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
         </li>
     );
@@ -51,10 +52,14 @@ function makePolls(polls) {
 function Home() {
     const [name, setName] = useState('');
     const [polls, setPolls] = useState([]);
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchData = async () => {
             const data = await getUser();
+            if (data.name === undefined && data.polls === undefined) {
+                navigate('/login', { replace: true });
+            }
             setName(data.name);
             setPolls(data.polls);
         }
