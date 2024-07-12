@@ -32,9 +32,10 @@ async function getUser() {
 }
 
 function makePoll(pollInfo, i) {
+    console.log(pollInfo);
     return (
         <li key={i}>
-            <p><a href={`../poll?p=${pollInfo.id}`}>{pollInfo.question}</a></p>
+            <p><a href={`/#/poll?p=${pollInfo.poll_id}`}>{pollInfo.question}</a></p>
             <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
         </li>
     );
