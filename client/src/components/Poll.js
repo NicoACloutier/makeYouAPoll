@@ -31,7 +31,7 @@ function Poll() {
     }
 
     const makeAnswer = (answer, i) => {
-        <li key={answer}><input type="radio" onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
+        return <li key={answer}><input type="radio" onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
     }
     
     useEffect(() => {
@@ -44,8 +44,8 @@ function Poll() {
         }
         fetchUser();
          
-        setPollId(window.location.hash.match(/[?&]p=([^&]+)[&]?/)[1]);
         const fetchData = async () => {
+            const pollId = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
             const data = await getPoll(pollId);
             setQuestion(data.question);
             setAnswers(data.answers);
