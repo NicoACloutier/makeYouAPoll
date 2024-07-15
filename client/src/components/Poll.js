@@ -21,17 +21,18 @@ function Poll() {
     const [choice, setChoice] = useState(undefined);
 
     function submit() {
-        if (choice !== undefined && user !== undefined) {
+        console.log({ poll_id: pollId, answer_id: choice, user_id: user.id });
+        if (choice !== undefined && pollId !== undefined && user !== undefined) {
             fetch(`http://127.0.0.1:${SERVER_PORT}/entries`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: { poll_id: poll_id, answer_id: choice, user_id: user.id },
+                body: JSON.stringify({ poll_id: pollId, answer_id: choice, user_id: user.id }),
             })
         }
     }
 
     const makeAnswer = (answer, i) => {
-        return <li key={answer}><input type="radio" onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
+        return <li key={answer}><input type="radio" checked={i === choice} onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
     }
     
     useEffect(() => {
@@ -45,8 +46,9 @@ function Poll() {
         fetchUser();
          
         const fetchData = async () => {
-            const pollId = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
-            const data = await getPoll(pollId);
+            const id = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
+            const data = await getPoll(id);
+            setPollId(id);
             setQuestion(data.question);
             setAnswers(data.answers);
         }
