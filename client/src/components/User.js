@@ -9,7 +9,7 @@ async function getPosts(id) {
     polls = (await polls.json());
     for (let i = 0; i < polls.length; i++) {
         const pollId = polls[i].poll_id;
-        const answer = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${id}`, { method: 'GET', });
+        const answer = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${pollId}`, { method: 'GET', });
         polls[i].answers = await answer.json();
     }
     return polls;
@@ -27,10 +27,11 @@ async function getUser(name) {
 }
 
 function makePoll(pollInfo, i) {
+    console.log(pollInfo);
     return (
         <li key={i}>
             <p><a href={`/#/poll?p=${pollInfo.poll_id}`}>{pollInfo.question}</a></p>
-            <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
+            <ul>{pollInfo.answers.map((x, j) => <li key={j}>{x.answer_text}</li>)}</ul>
         </li>
     );
 }
