@@ -12,6 +12,12 @@ async function getPoll(pollId) {
     return data;
 }
 
+async function getEntry(userId, pollId) {
+    const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?user_id=${userId}&poll_id=${pollId}`, method: { 'GET' });
+    const numEntries = await response.json();
+    return numEntries > 0;
+}
+
 
 function Poll() {
     const [question, setQuestion] = useState("");
@@ -19,9 +25,10 @@ function Poll() {
     const [user, setUser] = useState({});
     const [pollId, setPollId] = useState(undefined);
     const [choice, setChoice] = useState(undefined);
+    const [entered, setEntered] = useState(false);
+    const [ownPoll, setOwnPoll] = useState(false);
 
     function submit() {
-        console.log({ poll_id: pollId, answer_id: choice, user_id: user.id });
         if (choice !== undefined && pollId !== undefined && user !== undefined) {
             fetch(`http://127.0.0.1:${SERVER_PORT}/entries`, {
                 method: 'POST',
@@ -33,6 +40,12 @@ function Poll() {
 
     const makeAnswer = (answer, i) => {
         return <li key={answer}><input type="radio" checked={i === choice} onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
+    }
+
+    const makeDisplayAnswer = async (answer, i) => {
+        const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?poll_id=${pollId}&answer_id=${i}`, method: { 'GET' });
+        const numResponses = await response.json();
+        return <li key={i}>{answer} ({numResponses})</li>;
     }
     
     useEffect(() => {
@@ -48,6 +61,9 @@ function Poll() {
         const fetchData = async () => {
             const id = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
             const data = await getPoll(id);
+            const entered = await getEntry(id, user.id);
+            setEntered(entered);
+            setOwnPoll(data.user_id === user.id);
             setPollId(id);
             setQuestion(data.question);
             setAnswers(data.answers);
@@ -60,6 +76,14 @@ function Poll() {
             <div className="App">
                 <p>{question}</p>
                 <ul>{answers.map(x => <li key={x}>{x}</li>)}</ul>
+            </div>
+        );
+    }
+    else if (entered || ownPoll) {
+        return (
+            <div className="App">
+                <p>{question}</p>
+                <ul>{answers.map(makeDisplayAnswer)}</ul>
             </div>
         );
     }
