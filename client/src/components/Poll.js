@@ -74,7 +74,7 @@ function Poll() {
             setOwnPoll(data.user_id === user.id);
             setPollId(id);
             setResponseCounts(data.responseCounts);
-            setTimeIsUp(data.end_time);
+            setTimeIsUp(Date.parse(new Date()) > Date.parse(data.end_time));
             setQuestion(data.question);
             setAnswers(data.answers);
         }
