@@ -4,16 +4,27 @@ import '../App.css';
 
 const SERVER_PORT = 3000;
 
+async function getNumResponses(pollId, nAnswers) {
+    const responseNumbers = []
+    for (let i = 0; i < nAnswers; i++) {
+        const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?poll_id=${pollId}&answer_id=${i}`, { method: 'GET' });
+        responseNumbers[i] = await response.json();
+    }
+    return responseNumbers;
+}
+
 async function getPoll(pollId) {
     const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls?id=${pollId}`, { method: 'GET' });
     const answers = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${pollId}`, { method: 'GET' });
     const data = await response.json();
     data.answers = (await answers.json()).map(x => x.answer_text);
+    data.responseCounts = await getNumResponses(pollId, data.n_options);
+
     return data;
 }
 
 async function getEntry(userId, pollId) {
-    const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?user_id=${userId}&poll_id=${pollId}`, method: { 'GET' });
+    const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?user_id=${userId}&poll_id=${pollId}`, { method: 'GET' });
     const numEntries = await response.json();
     return numEntries > 0;
 }
@@ -27,6 +38,8 @@ function Poll() {
     const [choice, setChoice] = useState(undefined);
     const [entered, setEntered] = useState(false);
     const [ownPoll, setOwnPoll] = useState(false);
+    const [timeIsUp, setTimeIsUp] = useState(false);
+    const [responseCounts, setResponseCounts] = useState([]);
 
     function submit() {
         if (choice !== undefined && pollId !== undefined && user !== undefined) {
@@ -42,29 +55,26 @@ function Poll() {
         return <li key={answer}><input type="radio" checked={i === choice} onClick={x => setChoice(i)}></input><span>{answer}</span></li>;
     }
 
-    const makeDisplayAnswer = async (answer, i) => {
-        const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/entries?poll_id=${pollId}&answer_id=${i}`, method: { 'GET' });
-        const numResponses = await response.json();
+    const makeDisplayAnswer = (answer, i) => {
+        const numResponses = responseCounts[i];
         return <li key={i}>{answer} ({numResponses})</li>;
     }
     
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchData = async () => {
             const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
             const authData = await authResponse.json();
             if (authResponse.status === 200) {
                 setUser(authData);
             }
-        }
-        fetchUser();
-         
-        const fetchData = async () => {
             const id = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
             const data = await getPoll(id);
-            const entered = await getEntry(id, user.id);
+            const entered = await getEntry(authData.id, id);
             setEntered(entered);
             setOwnPoll(data.user_id === user.id);
             setPollId(id);
+            setResponseCounts(data.responseCounts);
+            setTimeIsUp(data.end_time);
             setQuestion(data.question);
             setAnswers(data.answers);
         }
@@ -79,7 +89,7 @@ function Poll() {
             </div>
         );
     }
-    else if (entered || ownPoll) {
+    else if (entered || ownPoll || timeIsUp) {
         return (
             <div className="App">
                 <p>{question}</p>
