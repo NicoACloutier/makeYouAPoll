@@ -47,7 +47,11 @@ function Poll() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ poll_id: pollId, answer_id: choice, user_id: user.id }),
-            })
+            });
+            const newCounts = [...responseCounts];
+            newCounts[choice] += 1;
+            setResponseCounts(newCounts);
+            setEntered(true);
         }
     }
 
