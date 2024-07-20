@@ -71,7 +71,7 @@ function Poll() {
             const data = await getPoll(id);
             const entered = await getEntry(authData.id, id);
             setEntered(entered);
-            setOwnPoll(data.user_id === user.id);
+            setOwnPoll(data.user_id === authData.id);
             setPollId(id);
             setResponseCounts(data.responseCounts);
             setTimeIsUp(Date.parse(new Date()) > Date.parse(data.end_time));
