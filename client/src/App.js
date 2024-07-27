@@ -44,6 +44,7 @@ const router = createHashRouter([
 function App() {
     return (
         <React.StrictMode>
+            <div class="sidenav"><p>Placeholder</p></div>
             <RouterProvider router={router} />
         </React.StrictMode>
     );
