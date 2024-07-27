@@ -16,12 +16,14 @@ router.get('/', (request, response) => {
     if (email !== undefined) {
         pool.query('SELECT * FROM users WHERE email = $1', [email], (error, results) => {
             if (error) throw error;
+            if (results.rows.length === 0) { response.status(404).send('No user found.'); }
             response.status(200).json(results.rows[0]);
         });
     }
     else {
         pool.query('SELECT * FROM users WHERE name = $1', [name], (error, results) => {
             if (error) throw error;
+            if (results.rows.length === 0) { response.status(404).send('No user found.'); }
             response.status(200).json(results.rows[0]);
         });
     }

@@ -17,8 +17,8 @@ async function findUser(email) {
     const response = await fetch(`http://localhost:${PORT}/users?email=${email}`, {
         method: 'GET',
     });
-    if (response === undefined) { return undefined; }
-    return response.json();
+    if (response === undefined || response.status === 404) { return undefined; }
+    return await response.json();
 }
 
 async function login(request, response) {
@@ -27,14 +27,15 @@ async function login(request, response) {
     if (userInfo === undefined) {
         response.status(404).send('User not found.');
     }
-    
-    if (informationMatches(enteredPassword, userInfo["salt"], userInfo["hash"])) {
-        const sessionId = uuid();
-        sessions[sessionId] = { id: userInfo["user_id"], name: userInfo["name"], email: userInfo["email"] };
-        response.cookie('si', sessionId, { httpOnly: false, maxAge: 3600000 });
-        response.status(200).json(sessions[sessionId]);
+    else {
+        if (informationMatches(enteredPassword, userInfo["salt"], userInfo["hash"])) {
+            const sessionId = uuid();
+            sessions[sessionId] = { id: userInfo["user_id"], name: userInfo["name"], email: userInfo["email"] };
+            response.cookie('si', sessionId, { httpOnly: false, maxAge: 3600000 });
+            response.status(200).json(sessions[sessionId]);
+        }
+        else { response.status(401).send('Incorrect username or password.'); }
     }
-    else { response.status(401).send('Incorrect username or password.'); }
 }
 
 function logout(request, response) {
