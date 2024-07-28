@@ -1,15 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const SERVER_PORT = 3000;
 
-function Login() {
+function Login({ setLoggedIn }) {
     const [email, setEmail] = useState("");
     const [enteredPassword, setEnteredPassword] = useState("");
     const [message, setMessage] = useState("");
-    const navigate = useNavigate();
 
     async function login() {
         setMessage("");
@@ -20,10 +18,9 @@ function Login() {
             headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify({ email, enteredPassword }),
         });
-        if (response.status === 200) {
-            navigate('/', { replace: true });
-        }
+        if (response.status === 200) { setLoggedIn(true); }
         else if (response.status === 401) { setMessage("Incorrect username or password."); }
+        else { setMessage("User not found."); }
     }
     
     function handleEmailChange(e) {
