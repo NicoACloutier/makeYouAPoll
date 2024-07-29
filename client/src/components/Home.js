@@ -8,8 +8,8 @@ async function getPosts(id) {
     const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
     const authData = await authResponse.json();
     if (authResponse.status === 200 && authData.id === id) {
-        let polls = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls?user_id=${id}`, { method: 'GET', });
-        polls = (await polls.json()).slice(0, 5);
+        let polls = await fetch(`http://127.0.0.1:${SERVER_PORT}/polls`, { method: 'GET', });
+        polls = await polls.json();
         for (let i = 0; i < polls.length; i++) {
             const pollId = polls[i].poll_id;
             const answer = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${pollId}`, { method: 'GET', });
@@ -32,7 +32,6 @@ async function getUser() {
 }
 
 function makePoll(pollInfo, i) {
-    console.log(pollInfo);
     return (
         <li key={i}>
             <p><a href={`/#/poll?p=${pollInfo.poll_id}`}>{pollInfo.question}</a></p>
