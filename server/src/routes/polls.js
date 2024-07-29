@@ -23,7 +23,7 @@ router.get('/', (request, response) => {
         });
     }
     else {
-            pool.query('SELECT * FROM polls', [], (error, results) => {
+            pool.query('SELECT * FROM polls OFFSET (SELECT count(*) FROM polls)-5', [], (error, results) => {
             if (error) throw error;
             response.status(200).json(results.rows);
         });
