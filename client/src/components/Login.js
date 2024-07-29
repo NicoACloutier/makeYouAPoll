@@ -30,6 +30,16 @@ function Login({ setLoggedIn }) {
     function handleEnteredPasswordChange(e) {
         setEnteredPassword(e.target.value);
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const authResponse = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
+            if (authResponse.status === 200) {
+                setLoggedIn(true);
+            }
+        };
+        fetchData();
+    }, []);
     
     return (
         <div className="App">
