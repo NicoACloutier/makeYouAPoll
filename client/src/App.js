@@ -66,18 +66,22 @@ function App() {
     if (loggedIn) {
         return (
             <React.StrictMode>
-                <div class="sidenav">
-                    <p>Make you a poll</p>
-                    <button onClick={logout}>Log out</button>
+                <div class="App">
+                    <div class="sidenav">
+                        <p>Make you a poll</p>
+                        <button onClick={logout}>Log out</button>
+                    </div>
+                    <RouterProvider router={router} />
                 </div>
-                <RouterProvider router={router} />
             </React.StrictMode>
         );
     }
     else {
         return (
             <React.StrictMode>
-                <Login setLoggedIn={x => setLoggedIn(x)} />
+                <div class="App">
+                    <Login setLoggedIn={x => setLoggedIn(x)} />
+                </div>
             </React.StrictMode>
         );
     }
