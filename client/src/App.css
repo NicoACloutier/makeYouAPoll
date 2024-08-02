@@ -1,7 +1,11 @@
 body {
-    color: #fa677f;
-    background: #707070;
+    color: #da2645;
+    background: #a8a8a8;
     font: 100% system-ui;
+}
+
+a {
+    color: #da2645;
 }
 
 .App {
