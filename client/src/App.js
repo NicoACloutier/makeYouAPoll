@@ -13,28 +13,6 @@ import NotFound from './components/NotFound.js';
 
 const SERVER_PORT = 3000;
 
-const router = createHashRouter([
-    {
-        path: "/",
-        element: <Home />,
-    },
-    {
-        path: "/user",
-        element: <User />,
-    },
-    {
-        path: "/create",
-        element: <CreatePoll />,
-    },
-    {
-        path: "/poll",
-        element: <Poll />,
-    },
-    {
-        path: "*",
-        element: <NotFound />,
-    },
-]);
 
 
 async function getUser() {
@@ -46,6 +24,30 @@ async function getUser() {
 function App() {
     const [userData, setUserData] = useState(undefined);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [sideBarList, setSideBarList] = useState([]);
+
+    const router = createHashRouter([
+        {
+            path: "/",
+            element: <Home setSideBarList={x => setSideBarList(x)}/>,
+        },
+        {
+            path: "/user",
+            element: <User setSideBarList={x => setSideBarList(x)}/>,
+        },
+        {
+            path: "/create",
+            element: <CreatePoll setSideBarList={x => setSideBarList(x)}/>,
+        },
+        {
+            path: "/poll",
+            element: <Poll setSideBarList={x => setSideBarList(x)}/>,
+        },
+        {
+            path: "*",
+            element: <NotFound />,
+        },
+    ]);
 
     const notLoggedRouter = createHashRouter([
         {
@@ -81,6 +83,7 @@ function App() {
                 <div class="App">
                     <div class="sidenav">
                         <p>Make you a poll</p>
+                        {sideBarList.map(x => x)}
                         <button onClick={logout}>Log out</button>
                     </div>
                     <RouterProvider router={router} />
