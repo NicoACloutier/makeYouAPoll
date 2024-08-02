@@ -19,10 +19,6 @@ const router = createHashRouter([
         element: <Home />,
     },
     {
-        path: "/register",
-        element: <Registration />,
-    },
-    {
         path: "/user",
         element: <User />,
     },
@@ -40,6 +36,7 @@ const router = createHashRouter([
     },
 ]);
 
+
 async function getUser() {
     const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
     if (response === undefined || response.status != 200) { return undefined; }
@@ -50,6 +47,21 @@ function App() {
     const [userData, setUserData] = useState(undefined);
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const notLoggedRouter = createHashRouter([
+        {
+            path: '/',
+            element: <Login setLoggedIn={x => setLoggedIn(x)}/>,
+        },
+        {
+            path: '/register',
+            element: <Registration />,
+        },
+        {
+            path: '*',
+            element: <NotFound />
+        },
+    ]);
+    
     useEffect(() => {
         const fetchData = async () => {
             const data = await getUser();
@@ -80,7 +92,7 @@ function App() {
         return (
             <React.StrictMode>
                 <div class="App">
-                    <Login setLoggedIn={x => setLoggedIn(x)} />
+                    <RouterProvider router={notLoggedRouter} />
                 </div>
             </React.StrictMode>
         );

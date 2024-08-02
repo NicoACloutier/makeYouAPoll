@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 const SERVER_PORT = 3000;
 
@@ -8,6 +9,7 @@ function Login({ setLoggedIn }) {
     const [email, setEmail] = useState("");
     const [enteredPassword, setEnteredPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     async function login() {
         setMessage("");
@@ -43,6 +45,7 @@ function Login({ setLoggedIn }) {
     
     return (
         <div className="App">
+            <button onClick={x => navigate('/register', { replace: true })}>Register</button>
             <label id="notification">{message}</label><br></br>
             <input type="text" id="email" name="email" placeholder="email@example.com" onChange={handleEmailChange}></input><br></br>
             <input type="password" id="password" name="password" placeholder="Password" onChange={handleEnteredPasswordChange}></input><br></br>

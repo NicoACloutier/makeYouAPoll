@@ -58,11 +58,12 @@ function Registration() {
             navigate('/', { replace: true });
             return;
         }
-        navigate('/login', { replace: true });
+        navigate('/', { replace: true });
     }
     
     return (
         <div className="App">
+            <button onClick={x => navigate('/', { replace: true })}>Login</button>
             <label id="notification" value={message}></label><br></br>
             <input type="text" id="email" name="email" placeholder="email@example.com" value={email} onChange={handleEmailChange}></input><br></br>
             <input type="text" id="name" name="name" placeholder="Username" value={name} onChange={handleNameChange}></input><br></br>
