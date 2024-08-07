@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider, Link } from "react-router-dom";
 
 import Registration from './components/Registration.js';
 import Login from './components/Login.js';
@@ -13,41 +13,40 @@ import NotFound from './components/NotFound.js';
 
 const SERVER_PORT = 3000;
 
-
-
 async function getUser() {
     const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/auth`, { method: 'GET', credentials: 'include' });
     if (response === undefined || response.status != 200) { return undefined; }
     return await response.json();
 }
 
+const router = createHashRouter([
+    {
+        path: "/",
+        element: <Home />,
+    },
+    {
+        path: "/user",
+        element: <User />,
+    },
+    {
+        path: "/create",
+        element: <CreatePoll />,
+    },
+    {
+        path: "/poll",
+        element: <Poll />,
+    },
+    {
+        path: "*",
+        element: <NotFound />,
+    },
+]);
+
+
 function App() {
     const [userData, setUserData] = useState(undefined);
     const [loggedIn, setLoggedIn] = useState(false);
     const [sideBarList, setSideBarList] = useState([]);
-
-    const router = createHashRouter([
-        {
-            path: "/",
-            element: <Home setSideBarList={x => setSideBarList(x)}/>,
-        },
-        {
-            path: "/user",
-            element: <User setSideBarList={x => setSideBarList(x)}/>,
-        },
-        {
-            path: "/create",
-            element: <CreatePoll setSideBarList={x => setSideBarList(x)}/>,
-        },
-        {
-            path: "/poll",
-            element: <Poll setSideBarList={x => setSideBarList(x)}/>,
-        },
-        {
-            path: "*",
-            element: <NotFound />,
-        },
-    ]);
 
     const notLoggedRouter = createHashRouter([
         {
@@ -81,11 +80,18 @@ function App() {
         return (
             <React.StrictMode>
                 <div class="App">
-                    <div class="sidenav">
-                        <p>Make you a poll</p>
-                        {sideBarList.map(x => x)}
-                        <button onClick={logout}>Log out</button>
-                    </div>
+                    <ul class="sidenav">
+                        <li>Make you a poll</li>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/create">Create poll</Link>
+                        </li>
+                        <li>
+                            <button onClick={logout}>Log out</button>
+                        </li>
+                    </ul>
                     <RouterProvider router={router} />
                 </div>
             </React.StrictMode>
