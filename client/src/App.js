@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-import { createHashRouter, RouterProvider, Link } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
 import Registration from './components/Registration.js';
 import Login from './components/Login.js';
@@ -80,18 +80,11 @@ function App() {
         return (
             <React.StrictMode>
                 <div class="App">
-                    <ul class="sidenav">
-                        <li>Make you a poll</li>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/create">Create poll</Link>
-                        </li>
-                        <li>
-                            <button onClick={logout}>Log out</button>
-                        </li>
-                    </ul>
+                    <div class="sidenav">
+                        <p>Make you a poll</p>
+                        <p><a href="./#/">Home</a></p>
+                        <p><a href="./#/create">Create</a></p>
+                    </div>
                     <RouterProvider router={router} />
                 </div>
             </React.StrictMode>
