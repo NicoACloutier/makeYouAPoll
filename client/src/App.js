@@ -9,6 +9,7 @@ import Home from './components/Home.js';
 import User from './components/User.js';
 import CreatePoll from './components/CreatePoll.js';
 import Poll from './components/Poll.js';
+import Profile from './components/Profile.js';
 import NotFound from './components/NotFound.js';
 
 const SERVER_PORT = 3000;
@@ -35,6 +36,10 @@ const router = createHashRouter([
     {
         path: "/poll",
         element: <Poll />,
+    },
+    {
+        path: "/profile",
+        element: <Profile />,
     },
     {
         path: "*",
@@ -84,6 +89,7 @@ function App() {
                         <p>Make you a poll</p>
                         <p><a href="./#/">Home</a></p>
                         <p><a href="./#/create">Create</a></p>
+                        <p><a href="./#/profile">Profile</a></p>
                     </div>
                     <RouterProvider router={router} />
                 </div>
@@ -93,7 +99,7 @@ function App() {
     else {
         return (
             <React.StrictMode>
-                <div class="App">
+                <div class="login">
                     <RouterProvider router={notLoggedRouter} />
                 </div>
             </React.StrictMode>
