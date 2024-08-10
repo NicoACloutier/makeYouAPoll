@@ -57,7 +57,7 @@ router.post('/', (request, response) => {
 Update a username or password.
 */
 router.put('/', (request, response) => {
-    const { newName, newHash, newSalt, id } = request.body;
+    const { newName, newHash, newSalt, id } = request.query;
     if (newName !== null) {
         pool.query('UPDATE users SET name = $1 WHERE user_id = $2;', [newName, id], (error, results) => {
             if (error) throw error;
