@@ -54,6 +54,25 @@ router.post('/', (request, response) => {
 });
 
 /*
+Update a username or password.
+*/
+router.put('/', (request, response) => {
+    const { newName, newHash, newSalt, id } = request.body;
+    if (newName !== null) {
+        pool.query('UPDATE users SET name = $1 WHERE user_id = $2;', [newName, id], (error, results) => {
+            if (error) throw error;
+            response.status(200).json(results.rows);
+        });
+    }
+    else {
+        pool.query('UPDATE users SET hash = $1, salt = $2 WHERE user_id = $3;', [newHash, newSalt, id], (error, results) => {
+            if (error) throw error;
+            response.status(200).json(results.rows);
+        })
+    }
+});
+
+/*
 Delete a user given an id.
 */
 router.delete('/:id', (request, response) => {
