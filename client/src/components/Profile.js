@@ -30,7 +30,6 @@ function Home() {
         <div className="App">
             <input onChange={e => setName(e.target.value)} placeholder="New name"></input><br />
             <button onClick={changeName}>Confirm name change</button> 
-            <button>Reset password</button>
         </div>
     );
 }
