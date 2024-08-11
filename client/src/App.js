@@ -85,11 +85,11 @@ function App() {
         return (
             <React.StrictMode>
                 <div class="App">
-                    <div class="sidenav">
-                        <p>Make you a poll</p>
-                        <p><a href="./#/">Home</a></p>
-                        <p><a href="./#/create">Create</a></p>
-                        <p><a href="./#/profile">Profile</a></p>
+                    <div class="sidenav container">
+                        <p class="sidenav-text">Make you a poll</p>
+                        <p class="sidenav-para"><a class="sidenav-item" href="./#/">Home</a></p>
+                        <p class="sidenav-para"><a class="sidenav-item" href="./#/create">Create</a></p>
+                        <p class="sidenav-para"><a class="sidenav-item" href="./#/profile">Profile</a></p>
                     </div>
                     <RouterProvider router={router} />
                 </div>
