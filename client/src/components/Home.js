@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 const SERVER_PORT = 3000;
 
@@ -50,7 +51,6 @@ function makePolls(polls) {
 }
 
 function Home({ setUserData }) {
-    const [name, setName] = useState('');
     const [polls, setPolls] = useState([]);
     const navigate = useNavigate();
 
@@ -60,17 +60,20 @@ function Home({ setUserData }) {
             if (data.name === undefined && data.polls === undefined) {
                 navigate('/login', { replace: true });
             }
-            setName(data.name);
             setPolls(data.polls);
             setUserData(data);
         }
         fetchData();
     }, []);
     
-    
+    function search(e) {
+        if (e.key === "Enter") navigate(`../search?q=${e.target.value}`, { replace: true });
+    }
+
     return (
         <div className="App">
-            <h1>{name}</h1>
+            <input placeholder="Search" className="searchbar" onKeyDown={search}/>
+            <h1>Recent polls</h1>
             <div>{makePolls(polls)}</div>
         </div>
     );

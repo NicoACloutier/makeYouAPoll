@@ -86,6 +86,10 @@ a {
     left: 40%;
 }
 
+.searchbar {
+    width: 20%; 
+}
+
 .App-link {
     color: #61dafb;
 }

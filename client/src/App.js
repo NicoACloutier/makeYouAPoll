@@ -11,6 +11,7 @@ import CreatePoll from './components/CreatePoll.js';
 import Poll from './components/Poll.js';
 import Profile from './components/Profile.js';
 import NotFound from './components/NotFound.js';
+import Search from './components/Search.js';
 
 const SERVER_PORT = 3000;
 
@@ -45,6 +46,10 @@ function App() {
         {
             path: "/profile",
             element: <Profile />,
+        },
+        {
+            path: "/search",
+            element : <Search />,
         },
         {
             path: "*",
@@ -83,14 +88,14 @@ function App() {
     if (loggedIn) {
         return (
             <React.StrictMode>
-                <div class="App">
-                    <div class="sidenav container">
-                        <p class="sidenav-text">Make you a poll</p>
-                        <p class="sidenav-para"><a class="sidenav-item" href="./#/">Home</a></p>
-                        <p class="sidenav-para"><a class="sidenav-item" href="./#/create">Create</a></p>
-                        <p class="sidenav-para"><a class="sidenav-item" href="./#/profile">Profile</a></p>
-                        <p class="sidenav-text">{userData.name}</p>
-                        <p class="sidenav-para"><a class="sidenav-item" href="./#/" onClick={x => logout()}>Logout</a></p>
+                <div className="App">
+                    <div className="sidenav container">
+                        <p className="sidenav-text">Make you a poll</p>
+                        <p className="sidenav-para"><a className="sidenav-item" href="./#/">Home</a></p>
+                        <p className="sidenav-para"><a className="sidenav-item" href="./#/create">Create</a></p>
+                        <p className="sidenav-para"><a className="sidenav-item" href="./#/profile">Profile</a></p>
+                        <p className="sidenav-text">{userData.name}</p>
+                        <p className="sidenav-para"><a className="sidenav-item" href="./#/" onClick={x => logout()}>Logout</a></p>
                     </div>
                     <RouterProvider router={router} />
                 </div>
@@ -100,7 +105,7 @@ function App() {
     else {
         return (
             <React.StrictMode>
-                <div class="login">
+                <div className="login">
                     <RouterProvider router={notLoggedRouter} />
                 </div>
             </React.StrictMode>
