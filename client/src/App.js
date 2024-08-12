@@ -20,39 +20,38 @@ async function getUser() {
     return await response.json();
 }
 
-const router = createHashRouter([
-    {
-        path: "/",
-        element: <Home />,
-    },
-    {
-        path: "/user",
-        element: <User />,
-    },
-    {
-        path: "/create",
-        element: <CreatePoll />,
-    },
-    {
-        path: "/poll",
-        element: <Poll />,
-    },
-    {
-        path: "/profile",
-        element: <Profile />,
-    },
-    {
-        path: "*",
-        element: <NotFound />,
-    },
-]);
-
-
 function App() {
-    const [userData, setUserData] = useState(undefined);
+    const [userData, setUserData] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
     const [sideBarList, setSideBarList] = useState([]);
 
+    const router = createHashRouter([
+        {
+            path: "/",
+            element: <Home setUserData={x => setUserData(x)}/>,
+        },
+        {
+            path: "/user",
+            element: <User />,
+        },
+        {
+            path: "/create",
+            element: <CreatePoll />,
+        },
+        {
+            path: "/poll",
+            element: <Poll />,
+        },
+        {
+            path: "/profile",
+            element: <Profile />,
+        },
+        {
+            path: "*",
+            element: <NotFound />,
+        },
+    ]);
+    
     const notLoggedRouter = createHashRouter([
         {
             path: '/',
@@ -90,6 +89,8 @@ function App() {
                         <p class="sidenav-para"><a class="sidenav-item" href="./#/">Home</a></p>
                         <p class="sidenav-para"><a class="sidenav-item" href="./#/create">Create</a></p>
                         <p class="sidenav-para"><a class="sidenav-item" href="./#/profile">Profile</a></p>
+                        <p class="sidenav-text">{userData.name}</p>
+                        <p class="sidenav-para"><a class="sidenav-item" href="./#/" onClick={x => logout()}>Logout</a></p>
                     </div>
                     <RouterProvider router={router} />
                 </div>

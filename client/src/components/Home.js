@@ -49,7 +49,7 @@ function makePolls(polls) {
     else { return <ul></ul>; }
 }
 
-function Home() {
+function Home({ setUserData }) {
     const [name, setName] = useState('');
     const [polls, setPolls] = useState([]);
     const navigate = useNavigate();
@@ -62,6 +62,7 @@ function Home() {
             }
             setName(data.name);
             setPolls(data.polls);
+            setUserData(data);
         }
         fetchData();
     }, []);
