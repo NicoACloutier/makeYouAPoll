@@ -59,7 +59,7 @@ function Search() {
      
     return (
         <div className="App">
-            <input placeholder="Search" defaultValue={query.replace('%20', ' ')} className="searchbar" onKeyDown={search} />
+            <input placeholder="Search polls" defaultValue={query.replace('%20', ' ')} className="searchbar" onKeyDown={search} />
             <p>{message}</p>
             <div>{makePolls(polls)}</div>
         </div>

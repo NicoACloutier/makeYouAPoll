@@ -72,7 +72,7 @@ function Home({ setUserData }) {
 
     return (
         <div className="App">
-            <input placeholder="Search" className="searchbar" onKeyDown={search}/>
+            <input placeholder="Search polls" className="searchbar" onKeyDown={search}/>
             <h1>Recent polls</h1>
             <div>{makePolls(polls)}</div>
         </div>
