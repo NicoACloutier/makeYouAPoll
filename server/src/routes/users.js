@@ -11,9 +11,16 @@ const SALT_LENGTH = 20;
 Return a user stored in the `users` table given their email.
 */
 router.get('/', (request, response) => {
-    const email = request.query.email; 
+    const email = request.query.email;
+    const id = request.query.id; 
     const name = request.query.userName;
-    if (email !== undefined) {
+    if (id !== undefined) {
+        pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
+            if (error) throw error;
+            response.status(200).json(results.rows[0]);
+        })
+    }
+    else if (email !== undefined) {
         pool.query('SELECT * FROM users WHERE email = $1', [email], (error, results) => {
             if (error) throw error;
             if (results.rows.length === 0) { response.status(404).send('No user found.'); }
@@ -27,17 +34,6 @@ router.get('/', (request, response) => {
             response.status(200).json(results.rows[0]);
         });
     }
-});
-
-/*
-Return a user stored in the `users` table given an id.
-*/
-router.get('/:id', (request, response) => {
-    const id = parseInt(request.params.id);
-    pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
-        if (error) throw error;
-        response.status(200).json(results.rows);
-    });
 });
 
 /*

@@ -13,8 +13,10 @@ async function getPosts(id) {
         polls = await polls.json();
         for (let i = 0; i < polls.length; i++) {
             const pollId = polls[i].poll_id;
+            const user = await fetch(`http://127.0.0.1:${SERVER_PORT}/users?id=${polls[i].user_id}`, { method: 'GET' });
             const answer = await fetch(`http://127.0.0.1:${SERVER_PORT}/answers?poll_id=${pollId}`, { method: 'GET', });
             polls[i].answers = (await answer.json()).map(x => x.answer_text);
+            polls[i].userName = (await user.json()).name;
         }
         return polls;
     }
@@ -34,20 +36,24 @@ async function getUser() {
 
 function makePoll(pollInfo, i) {
     return (
-        <li key={i}>
-            <p><a href={`/#/poll?p=${pollInfo.poll_id}`}>{pollInfo.question}</a></p>
-            <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
-        </li>
+        <div className="post-para" href={`/#/poll?p=${pollInfo.poll_id}`}>
+            <a className="post" href={`/#/poll?p=${pollInfo.poll_id}`}>
+                <p className="poll-text">{pollInfo.question}
+                    <span className="poll-user">{pollInfo.userName}</span>
+                </p>
+                <ul>{pollInfo.answers.map(x => <li key={x}>{x}</li>)}</ul>
+            </a>
+        </div>
     );
 }
 
 function makePolls(polls) {
     if (polls !== undefined) {
         return (
-            <ul>{polls.map(makePoll)}</ul>
+            <div>{polls.map(makePoll)}</div>
         );
     }
-    else { return <ul></ul>; }
+    else { return <div></div>; }
 }
 
 function Home({ setUserData }) {
