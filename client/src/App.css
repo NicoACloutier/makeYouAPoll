@@ -83,10 +83,54 @@ a {
 }
 
 .login {
-    padding: 0px 0px 0px 0px;
-    position: absolute;
-    top: 40%;
-    left: 40%;
+    background-color: #838383;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    top: 0%;
+    padding: 20px;
+    width: 20%;
+    margin: 0 auto;
+    padding: 60px;
+    border: 1px solid #111;
+}
+
+.login-container {
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0px 0px 0px;
+}
+
+.login-button {
+    background-color: #a8a8a8;
+    border-color: #111;
+    border-radius: 10px;
+    color: #111; 
+}
+
+.login-title {
+    font: 175% system-ui;
+    font-weight: bold;
+    color: #111;
+}
+
+.login-input {
+    width: 90%;
+    border-radius: 7px;
+    height: 25%;
+    border: none;
+}
+
+.login-input:hover {
+    background-color: #d0d0d0;
+}
+
+.login-button:hover {
+    background-color: white; 
 }
 
 .searchbar {

@@ -105,7 +105,7 @@ function App() {
     else {
         return (
             <React.StrictMode>
-                <div className="login">
+                <div className="login-container">
                     <RouterProvider router={notLoggedRouter} />
                 </div>
             </React.StrictMode>

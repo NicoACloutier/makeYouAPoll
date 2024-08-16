@@ -62,14 +62,15 @@ function Registration() {
     }
     
     return (
-        <div className="App">
-            <button onClick={x => navigate('/', { replace: true })}>Login</button>
+        <div className="login">
+            <label className="login-title">Register</label><p />
+            <button className="login-button" onClick={x => navigate('/', { replace: true })}>Login</button><p />
             <label id="notification" value={message}></label><br></br>
-            <input type="text" id="email" name="email" placeholder="email@example.com" value={email} onChange={handleEmailChange}></input><br></br>
-            <input type="text" id="name" name="name" placeholder="Username" value={name} onChange={handleNameChange}></input><br></br>
-            <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange}></input><br></br>
-            <input type="password" id="repeatedPassword" name="repeatedPassword" placeholder="Repeat password" value={repeatedPassword} onChange={handleRepeatedPasswordChange}></input><br></br>
-            <button type="submit" onClick={createUser}>Submit</button>
+            <input className="login-input" type="text" id="email" name="email" placeholder="email@example.com" value={email} onChange={handleEmailChange}></input><br></br>
+            <input className="login-input" type="text" id="name" name="name" placeholder="Username" value={name} onChange={handleNameChange}></input><br></br>
+            <input className="login-input" type="password" id="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange}></input><br></br>
+            <input className="login-input" type="password" id="repeatedPassword" name="repeatedPassword" placeholder="Repeat password" value={repeatedPassword} onChange={handleRepeatedPasswordChange}></input><p />
+            <button className="login-button" type="submit" onClick={createUser}>Submit</button>
         </div>
     );
 }

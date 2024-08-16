@@ -44,12 +44,13 @@ function Login({ setLoggedIn }) {
     }, []);
     
     return (
-        <div className="App">
-            <button onClick={x => navigate('/register', { replace: true })}>Register</button>
-            <label id="notification">{message}</label><br></br>
-            <input type="text" id="email" name="email" placeholder="email@example.com" onChange={handleEmailChange}></input><br></br>
-            <input type="password" id="password" name="password" placeholder="Password" onChange={handleEnteredPasswordChange}></input><br></br>
-            <button type="submit" onClick={login}>Submit</button>
+        <div className="login">
+            <label className="login-title">Login</label><p />
+            <button className="login-button" onClick={x => navigate('/register', { replace: true })}>Register</button><p />
+            <label id="notification">{message}</label><p />
+            <input className="login-input" type="text" id="email" name="email" placeholder="email@example.com" onChange={handleEmailChange}></input><br />
+            <input className="login-input" type="password" id="password" name="password" placeholder="Password" onChange={handleEnteredPasswordChange}></input><p />
+            <button className="login-button" type="submit" onClick={login}>Submit</button>
         </div>
     );
 }
