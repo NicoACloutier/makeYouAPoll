@@ -36,7 +36,7 @@ function PollCreate() {
     }
     
     function renderAnswer(i) {
-        return <input type="text" id={`ans${i}`} key={`ans${i}`} defaultValue={answers[i]} onChange={e => setAnswer(e, i)}></input>;
+        return <div><input type="text" className="form-input" id={`ans${i}`} key={`ans${i}`} defaultValue={answers[i]} onChange={e => setAnswer(e, i)}></input><br /></div>;
     }
     
     function renderAnswers() {
@@ -44,7 +44,7 @@ function PollCreate() {
         for (let i = 0; i < answers.length; i++) {
             renderedAnswers.push(renderAnswer(i));
         }
-        return <div>{renderedAnswers}</div>;
+        return <div>{renderedAnswers}<br /></div>;
     }
     
     async function createAnswers(pollId) {
@@ -76,11 +76,11 @@ function PollCreate() {
     
     return (
         <div className="App">
-            <div>Question: </div><input type="text" name="question" placeholder="Poll question" onChange={updateQuestion}></input>
-            <div>End time: </div><input type="text" name="time" placeholder="YYYY-MM-DD" onChange={updateEndTime}></input>
-            <div>Answers: </div><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={updateValue}></input><div>{nAnswers}</div>
+            <h3>Question: </h3><input className="form-input" type="text" name="question" placeholder="Poll question" onChange={updateQuestion}></input>
+            <h3>End time: </h3><input type="text" name="time" className="form-input" placeholder="YYYY-MM-DD" onChange={updateEndTime}></input>
+            <h3>Answers ({nAnswers}): </h3><input type="range" min="2" max="20" defaultValue="2" name="slider" id="slider" onChange={updateValue}></input>
             <div>{renderAnswers()}</div>
-            <button type="submit" onClick={createPoll}>Submit</button>
+            <button type="submit" className="form-button" onClick={createPoll}>Submit</button>
         </div>
     );
 }

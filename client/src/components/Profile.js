@@ -31,8 +31,9 @@ function Home() {
     
     return (
         <div className="App">
-            <input onChange={e => setName(e.target.value)} placeholder="New name"></input><br />
-            <button onClick={changeName}>Confirm name change</button>
+            <h3>Change username</h3>
+            <input className="form-input" onChange={e => setName(e.target.value)} placeholder="New name"></input><br />
+            <button className="form-button" onClick={changeName}>Confirm name change</button>
             <p>{message}</p> 
         </div>
     );
