@@ -126,6 +126,11 @@ a {
     border: none;
 }
 
+.bar {
+    background-color: #838383;
+    border-radius: 5px;
+}
+
 .login-title {
     font: 175% system-ui;
     font-weight: bold;

@@ -29,7 +29,6 @@ async function getEntry(userId, pollId) {
     return numEntries > 0;
 }
 
-
 function Poll() {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
@@ -40,6 +39,7 @@ function Poll() {
     const [ownPoll, setOwnPoll] = useState(false);
     const [timeIsUp, setTimeIsUp] = useState(false);
     const [responseCounts, setResponseCounts] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
 
     function submit() {
         if (choice !== undefined && pollId !== undefined && user !== undefined) {
@@ -50,6 +50,7 @@ function Poll() {
             });
             const newCounts = [...responseCounts];
             newCounts[choice] += 1;
+            setTotalCount(totalCount + 1);
             setResponseCounts(newCounts);
             setEntered(true);
         }
@@ -61,7 +62,14 @@ function Poll() {
 
     const makeDisplayAnswer = (answer, i) => {
         const numResponses = responseCounts[i];
-        return <li key={i}>{answer} ({numResponses})</li>;
+        if (totalCount === 0) {
+            return <p className="bar" style={{width: '100%'}} key={i}>{answer} ({numResponses})</p>;
+        }
+        else if (numResponses === 0) {
+            return <p key={i}>{answer} ({numResponses})</p>;
+        }
+        const percentage = 100 * (numResponses / totalCount);
+        return <p className="bar" style={{width: percentage}} key={i}>{answer} ({numResponses})</p>;
     }
     
     useEffect(() => {
@@ -78,6 +86,7 @@ function Poll() {
             setOwnPoll(data.user_id === authData.id);
             setPollId(id);
             setResponseCounts(data.responseCounts);
+            setTotalCount(data.responseCounts.reduce((total, current) => { total + current; }, 0));
             setTimeIsUp(Date.parse(new Date()) > Date.parse(data.end_time));
             setQuestion(data.question);
             setAnswers(data.answers);
@@ -97,7 +106,7 @@ function Poll() {
         return (
             <div className="App">
                 <p>{question}</p>
-                <ul>{answers.map(makeDisplayAnswer)}</ul>
+                <div>{answers.map(makeDisplayAnswer)}</div>
             </div>
         );
     }
