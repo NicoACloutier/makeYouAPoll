@@ -28,20 +28,24 @@ async function getUser(name) {
 
 function makePoll(pollInfo, i) {
     return (
-        <li key={i}>
-            <p><a href={`/#/poll?p=${pollInfo.poll_id}`}>{pollInfo.question}</a></p>
-            <ul>{pollInfo.answers.map((x, j) => <li key={j}>{x.answer_text}</li>)}</ul>
-        </li>
+        <div className="post-para" href={`/#/poll?p=${pollInfo.poll_id}`}>
+            <a className="post" href={`/#/poll?p=${pollInfo.poll_id}`}>
+                <p className="poll-text">{pollInfo.question}
+                    <span className="poll-user">{pollInfo.userName}</span>
+                </p>
+                <ul>{pollInfo.answers.map(x => <li>{x.answer_text}</li>)}</ul>
+            </a>
+        </div>
     );
 }
 
 function makePolls(polls) {
     if (polls !== undefined) {
         return (
-            <ul>{polls.map(makePoll)}</ul>
+            <div>{polls.map(makePoll)}</div>
         );
     }
-    else { return <ul></ul>; }
+    else { return <div></div>; }
 }
 
 function User() {
