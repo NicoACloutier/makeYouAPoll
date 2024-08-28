@@ -82,6 +82,20 @@ a {
     padding: 0 0 10px 0;
 }
 
+.post-title {
+    font: 130% system-ui;
+    color: #111;
+    font-weight: bold; 
+}
+
+.post-user {
+    float: right;
+    font: 100% system-ui;
+    font-weight: normal;
+    color: #111;
+    text-decoration: none;
+}
+
 .login {
     background-color: #838383;
     border-radius: 10px;
@@ -129,6 +143,7 @@ a {
 .bar {
     background-color: #838383;
     border-radius: 5px;
+    padding: 5px;
 }
 
 .login-title {

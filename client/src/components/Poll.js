@@ -29,10 +29,16 @@ async function getEntry(userId, pollId) {
     return numEntries > 0;
 }
 
+async function getOriginator(userId) {
+    const response = await fetch(`http://127.0.0.1:${SERVER_PORT}/users?id=${userId}`, { method: 'GET' });
+    return await response.json();
+}
+
 function Poll() {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
     const [user, setUser] = useState({});
+    const [originator, setOriginator] = useState({});
     const [pollId, setPollId] = useState(undefined);
     const [choice, setChoice] = useState(undefined);
     const [entered, setEntered] = useState(false);
@@ -68,8 +74,8 @@ function Poll() {
         else if (numResponses === 0) {
             return <p key={i}>{answer} ({numResponses})</p>;
         }
-        const percentage = 100 * (numResponses / totalCount);
-        return <p className="bar" style={{width: percentage}} key={i}>{answer} ({numResponses})</p>;
+        const percentage = Math.floor(100 * (numResponses / totalCount) * 0.7);
+        return <p className="bar" style={{width: `${percentage}%`}} key={i}>{answer} ({numResponses})</p>;
     }
     
     useEffect(() => {
@@ -82,11 +88,12 @@ function Poll() {
             const id = window.location.hash.match(/poll\?p=([^&/]+)/)[1];
             const data = await getPoll(id);
             const entered = await getEntry(authData.id, id);
+            setOriginator(await getOriginator(data.user_id));
             setEntered(entered);
             setOwnPoll(data.user_id === authData.id);
             setPollId(id);
             setResponseCounts(data.responseCounts);
-            setTotalCount(data.responseCounts.reduce((total, current) => { total + current; }, 0));
+            setTotalCount(data.responseCounts.reduce((total, current) => { return total + current; }, 0));
             setTimeIsUp(Date.parse(new Date()) > Date.parse(data.end_time));
             setQuestion(data.question);
             setAnswers(data.answers);
@@ -97,7 +104,7 @@ function Poll() {
     if (user.id === undefined) {
         return (
             <div className="App">
-                <p>{question}</p>
+                <p className="post-title">{question}</p>
                 <ul>{answers.map(x => <li key={x}>{x}</li>)}</ul>
             </div>
         );
@@ -105,7 +112,10 @@ function Poll() {
     else if (entered || ownPoll || timeIsUp) {
         return (
             <div className="App">
-                <p>{question}</p>
+                <p>
+                    <span className="post-title">{question}</span>
+                    <a href={`/#/user?u=${originator.name}`} className="post-user">{originator.name}</a>
+                </p>
                 <div>{answers.map(makeDisplayAnswer)}</div>
             </div>
         );
@@ -113,7 +123,7 @@ function Poll() {
     else {
         return (
             <div className="App">
-                <p>{question}</p>
+                <p className="post-title">{question}</p>
                 <ul>{answers.map(makeAnswer)}</ul>
                 <button type="submit" onClick={submit}>Submit</button>    
             </div>
