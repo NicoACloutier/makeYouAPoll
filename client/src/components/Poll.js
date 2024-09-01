@@ -69,7 +69,7 @@ function Poll() {
     const makeDisplayAnswer = (answer, i) => {
         const numResponses = responseCounts[i];
         if (totalCount === 0) {
-            return <p className="bar" style={{width: '100%'}} key={i}>{answer} ({numResponses})</p>;
+            return <p key={i}>{answer} ({numResponses})</p>;
         }
         else if (numResponses === 0) {
             return <p key={i}>{answer} ({numResponses})</p>;
