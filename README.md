@@ -2,6 +2,16 @@
 
 A full-stack web application for poll creation, dissemination, and answering.
 
+![The registration page.](/register.png?raw=true "The registration page.")
+![The login page.](/login.png?raw=true "The login page.")
+![The poll creation page.](/create.png?raw=true "The poll creation page.")
+![An empty poll.](/empty.png?raw=true "An empty poll.")
+![An unanswered poll.](/unanswered.png?raw=true "An unanswered poll.")
+![An answered poll.](/full.png?raw=true "An answered poll.")
+![A user page.](/user.png?raw=true "A user page.")
+![The homepage.](/recent.png?raw=true "The homepage.")
+
+
 ## Running the application
 
 To run the application natively requires Node.js, React, Express, and PostgreSQL. To run the application, you must run both the server and client portions.
